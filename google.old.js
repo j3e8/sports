@@ -1,7 +1,3 @@
-/*
- * Google Custom Search API key: AIzaSyAsIsTmfo7TeJSZLCpL_Clh0-ssH9K1PrY
- */
-
 const _ = require('lodash');
 const fs = require('fs-promise');
 const puppeteer = require('puppeteer');

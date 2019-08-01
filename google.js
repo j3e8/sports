@@ -19,7 +19,7 @@ if (!PAGES || !START_PAGE || !OUT_FILE) {
 }
 
 function parseSearchResults (html) {
-  const match_r = /<a href="\/url\?q=(.*?)"/gmi;
+  const match_r = /<a href="(http[^"]+)"/gmi;
   const matches = [];
   let m;
   while (m = match_r.exec(html)) {
@@ -27,7 +27,7 @@ function parseSearchResults (html) {
       matches.push(m[1]);
     }
   }
-  const filtered = matches.filter(m => !m.includes('google') && m[0] !== '/' && !m.includes('bluesombrero'));
+  const filtered = matches.filter(m => !m.includes('google') && m[0] !== '/' && !m.includes('bluesombrero') && !m.includes('gc.com'));
   return _.uniq(filtered);
 }
 
@@ -39,7 +39,7 @@ function crawl (pages, crawlUrl, mailingList) {
   console.log(`crawling ${crawlUrl} (pages left: ${pages})`);
 
   // get a page of search results
-  return rp(crawlUrl)
+  return rp(crawlUrl, { headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36' } })
   .then((html) => {
     const links = _.uniq(
       parseSearchResults(html)
